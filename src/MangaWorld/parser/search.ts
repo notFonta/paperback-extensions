@@ -1,4 +1,5 @@
 
+import { children } from "cheerio/lib/api/traversing";
 import type {MangaTile, Source } from "paperback-extensions-common";
 
 export function parsedSearchResult($: cheerio.Root) : MangaTile[]{
@@ -16,12 +17,13 @@ export function parsedSearchResult($: cheerio.Root) : MangaTile[]{
             }))
     console.log(`id: ${id}`);
     console.log(`title: ${title}`);
-    console.log(`title: ${image}`);
+    console.log(`image: ${image}`);
+
   }
   return mangaTiles;
 }
 
 export function nLastPage($: cheerio.Root): string {
-  let nLastPage = $("li.page-item.last.disabled").text();
-  return nLastPage;
+  let nLPage = $('.pagination').children().last().text();
+  return nLPage;
 }

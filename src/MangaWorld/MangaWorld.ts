@@ -59,7 +59,7 @@ export class MangaWorld extends BaseTemplate {
   }
   async getChapterDetails(mangaId: string, chapterId: string): Promise<ChapterDetails> {
     console.log(`[getChapterDetails] start: ${mangaId} | ${chapterId}`);
-    const data = await this.request(`/manga/${mangaId}/read/${chapterId}`);
+    const data = await this.request(`/manga/${mangaId}/read/${chapterId}?style=list`);
     console.log("[getChapterDetails] parsing page");
     const results = parseChapterDetails(data, mangaId, chapterId);
     console.log("[getChapterDetails] returning results");
@@ -84,6 +84,13 @@ export class MangaWorld extends BaseTemplate {
         results: result,
         metadata: mData
     })
+  }
+
+  async getHomePageSections(sectionCallback: (section: HomeSection) => void): Promise<void> {
+    console.log("[getSearchResults] start");
+    const data = await this.request("/");
+    console.log("[getSearchResults] parsing home page");
+
   }
 
 }

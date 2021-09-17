@@ -9,22 +9,23 @@ beforeEach(() => {
   source = new MangaWorld(cheerio);
 });
 
- test("getMangaDetails", async () => {
+ /* test("getMangaDetails", async () => {
   let result = await source.getMangaDetails("2173/asadora");
   expect(result.titles[0] == "Asadora");
-});
+}); */
 
 /* test("getChapters", async () => {
   let result = await source.getChapters("1794");
 }); */
 
 
-test("getChapterDetails", async () => {
+/* test("getChapterDetails", async () => {
   let result = await source.getChapterDetails("1684/tokyo-revengers", "60c156351c8dbb7cee36bdaf");
-});
+}); */
 
-/* test("getSearchResult", async () => {
-  let query = <SearchRequest>{title : "sad"};
+test("getSearchResult", async () => {
+  let query = <SearchRequest>{title : "as"};
   let result = await source.getSearchResults(query,1);
 
-}); */
+});
+

@@ -2,15 +2,17 @@ import type { Manga, Chapter } from "paperback-extensions-common";
 import { MangaStatus, LanguageCode } from "paperback-extensions-common";
 
 function getStatus($: cheerio.Root): MangaStatus {
-  const status = $("series__status").text().trim().toLowerCase();
+  const status = $('span.font-weight-bold:contains("Stato: ")').first().next().text().trim().toLowerCase().replace(/\s/g, "");
   console.log(`[getStatus] raw status: ${status}`);
   switch (status) {
-    case "ongoing":
+    case "incorso":
       return MangaStatus.ONGOING;
-    case "dropped":
+    case "droppato":
       return MangaStatus.ABANDONED;
-    case "finished":
+    case "finito":
       return MangaStatus.COMPLETED;
+    case "inpausa":
+      return MangaStatus.HIATUS;
     default:
       return MangaStatus.UNKNOWN;
   }
@@ -19,7 +21,7 @@ function getStatus($: cheerio.Root): MangaStatus {
 export function parseLastUpdate($: cheerio.Root): Date | undefined {
   console.log(`[parseLastUpdate] start`);
 
-  const rawLastUpdate = $(".chapter__date").first().text().trim();
+  const rawLastUpdate = $(".text-right.text-muted.chap-date").first().text().trim();
   console.log(`[parseLastUpdate] raw lastUpdate: ${rawLastUpdate}`);
 
   const lastUpdate = new Date(rawLastUpdate);
@@ -40,11 +42,10 @@ export function parseMangaDetails($: cheerio.Root, mangaId: string): Manga {
   const title = $(".name.bigger").text().trim();
   console.log(title);
   const image = $("img.rounded").attr("src") || "";
-  const author = $("span.font-weight-bold").children()
-    .text()
+  const author = $('span.font-weight-bold:contains("Autore: ")').next().text()
   const desc = $("div#noidungm").text().trim();
   const status = getStatus($);
-  // const lastUpdate = parseLastUpdate($);
+  const testasd = parseLastUpdate($);
   const lastUpdate = new Date();
 
   const info = {
