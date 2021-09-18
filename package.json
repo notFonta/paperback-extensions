@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:IntermittentlyRupert/paperback-extensions.git"
+    "url": "git@github.com:simonefontanella/paperback-extensions.git"
   },
   "repositoryName": "Fonta's Paperback Extensions",
   "scripts": {

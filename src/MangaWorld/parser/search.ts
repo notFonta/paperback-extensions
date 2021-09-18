@@ -23,7 +23,21 @@ export function parsedSearchResult($: cheerio.Root) : MangaTile[]{
   return mangaTiles;
 }
 
-export function nLastPage($: cheerio.Root): string {
-  let nLPage = $('.pagination').children().last().text();
-  return nLPage;
+export function isLastPage($: cheerio.Root, page: number): boolean {
+  let quantityResult = $('.search-quantity.col-6.col-md-4.col-lg-3.pt-3.pb-1.offset-md-8.offset-lg-6.d-flex.justify-content-end.align-items-end').text();
+  let nMangainPage= $("div.entry").toArray().length;
+  quantityResult = quantityResult.split(' ')[0];
+  console.log(`quantityResult:${quantityResult}`);
+  console.log(`nMangainPage:${nMangainPage}`);
+  console.log(`page:${page}`);
+  if(Number(quantityResult)> nMangainPage*page){
+    console.log('not last page');
+    return false;
+  }
+  else{
+    console.log('is last page');
+    return true;
+  }
 }
+
+

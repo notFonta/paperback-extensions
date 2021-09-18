@@ -8,6 +8,7 @@ import {
   PagedResults,
   MangaUpdates,
   HomeSection,
+  HomeSectionType,
 } from "paperback-extensions-common";
 
 
@@ -23,17 +24,17 @@ import {
   parseChapterDetails,
   parsedSearchResult
 } from "./parser";
-import { nLastPage } from "./parser/search";
+import { isLastPage } from "./parser/search";
 
 export const MangaWorldInfo: SourceInfo = {
-  version: "1.0.0",
+  version: "1.0.1",
   name: "MangaWorld",
   icon: "icon.png",
   description: "Extension that pulls manga from MangaWorld.io",
   author: "Fonta",
   language: "it",
   websiteBaseURL: BASE_URL,
-  contentRating: ContentRating.ADULT,
+  contentRating: ContentRating.MATURE,
 };
 
 export class MangaWorld extends BaseTemplate {
@@ -69,17 +70,17 @@ export class MangaWorld extends BaseTemplate {
   async getSearchResults(query: SearchRequest, metadata: any): Promise<PagedResults> {
     console.log(`[getSearchResults] start: ${query}`);
     let page: number = metadata?.page ?? 1
-    const data = await this.request(`/archive?keyword=${query.title}`);
+    console.log(`[metadata]: ${metadata?.page}`);
+    const data = await this.request(`/archive?keyword=${query.title}&page=${page}`);
 
     const result = parsedSearchResult(data);
-    const numberLastPage = Number(nLastPage(data));
-    console.log(`[numberLastPage]: ${numberLastPage}`);
     let mData = undefined
-    if(numberLastPage > page){
+    if(!isLastPage(data,page)){
       mData = {page: (page + 1)}
     }
     console.log(`[result]: ${result}`);
     console.log(`[nLastPage]: ${page}`);
+    console.log(`[mdata]: ${mData?.page}`);
     return createPagedResults({
         results: result,
         metadata: mData
@@ -88,9 +89,13 @@ export class MangaWorld extends BaseTemplate {
 
   async getHomePageSections(sectionCallback: (section: HomeSection) => void): Promise<void> {
     console.log("[getSearchResults] start");
-    const data = await this.request("/");
+    const data = await this.request("/archive?sort=most_read");
+    const sectionMostRead = createHomeSection({ id: 'most_read', title: 'I più letti', type: HomeSectionType.singleRowLarge, view_more: false });
+    sectionCallback(sectionMostRead);
     console.log("[getSearchResults] parsing home page");
-
+    const result = parseHomepage(data);
+    sectionMostRead.items = result;
+    sectionCallback(sectionMostRead);
   }
 
 }

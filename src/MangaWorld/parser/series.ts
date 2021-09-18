@@ -24,7 +24,67 @@ export function parseLastUpdate($: cheerio.Root): Date | undefined {
   const rawLastUpdate = $(".text-right.text-muted.chap-date").first().text().trim();
   console.log(`[parseLastUpdate] raw lastUpdate: ${rawLastUpdate}`);
 
-  const lastUpdate = new Date(rawLastUpdate);
+  let formattedDate = "";
+
+  let htmlDate = rawLastUpdate.split(' ');
+
+  //start with year
+  formattedDate += htmlDate[2] += "/";
+
+  switch(htmlDate[1]){
+    case "Gennaio":
+      formattedDate += "01";
+      break;
+
+    case "Febbraio":
+      formattedDate += "02";
+      break;
+
+    case "Marzo":
+      formattedDate += "03";
+    break;
+
+    case "Aprile":
+      formattedDate += "04";
+      break;
+
+    case "Maggio":
+      formattedDate += "05";
+      break;
+
+    case "Giugno":
+      formattedDate += "06";
+      break;
+
+    case "Luglio":
+      formattedDate += "07";
+      break;
+
+    case "Agosto":
+      formattedDate += "08";
+
+      break;
+
+    case "Settembre":
+      formattedDate += "09";
+      break;
+
+    case "Ottobre":
+      formattedDate += "10";
+      break;
+
+    case "Novembre":
+      formattedDate += "11";
+      break;
+
+    case "Dicembre":
+      formattedDate += "12";
+      break;
+  }
+
+  formattedDate += "/" + htmlDate[0];
+  console.log(formattedDate);
+  const lastUpdate = new Date(formattedDate);
   console.log(`[parseLastUpdate] parsed lastUpdate: ${lastUpdate}`);
 
   if (isNaN(lastUpdate.getTime())) {
@@ -45,8 +105,7 @@ export function parseMangaDetails($: cheerio.Root, mangaId: string): Manga {
   const author = $('span.font-weight-bold:contains("Autore: ")').next().text()
   const desc = $("div#noidungm").text().trim();
   const status = getStatus($);
-  const testasd = parseLastUpdate($);
-  const lastUpdate = new Date();
+  const lastUpdate = parseLastUpdate($);
 
   const info = {
     id: mangaId,
