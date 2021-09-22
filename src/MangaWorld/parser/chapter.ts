@@ -11,7 +11,7 @@ export function parseChapterDetails(
   // let nPages = $('.page.custom-select').find('option').first().text();
   // nPages = nPages.split('/').pop() || nPages;
   // console.log(nPages);
-//trigger
+
   // // $('script').each((idx, elem) => {
   // //   console.log(`INDEX: ${idx}`)
   // //   console.log(elem);
